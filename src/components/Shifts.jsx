@@ -1,11 +1,15 @@
 import React from 'react';
 
 function Shifts({ shifts }) {
-  const listOfShifts = shifts.map((shift, index) => 
-    <td key = {index}>{shift.name}</td>
-  );
   return (
-    <tr>{listOfShifts}</tr>
+    shifts.map((shift, index) =>
+      <tr key = {index}>
+        <td>{shift.name}</td>
+        <td>Sample Date</td>
+        <td>Sample Start Time</td>
+        <td>Sample End Time</td>
+      </tr>
+    )
   );
 }
 
