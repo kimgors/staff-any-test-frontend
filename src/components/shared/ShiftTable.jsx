@@ -1,7 +1,7 @@
 import Shifts from '../Shifts';
 import React from 'react';
 
-function ShiftTable({ shifts }) {
+function ShiftTable() {
   return (
     <table className="table">
       <thead>
@@ -13,7 +13,7 @@ function ShiftTable({ shifts }) {
         </tr>
       </thead>
       <tbody>
-        <Shifts shifts={shifts}/>
+        <Shifts/>
       </tbody>
     </table>
   );
