@@ -12,28 +12,64 @@ function App() {
   const [startDate, setStartDate] = useState(new Date());
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
+  const [currentShift, setCurrentShift] = useState(null);
 
   useEffect(() => {
     Modal.setAppElement('#root')
   });
 
-  function openModal() {
+  function openModal(shift) {
     setModalIsOpen(true);
+    if (shift.id) {
+      setCurrentShift(shift);
+      setName(shift.name);
+      setStartDate(new Date(shift.date));
+      setStartTime(shift.converted_start_time);
+      setEndTime(shift.converted_end_time);
+    }
   }
 
   function closeModal(){
     setModalIsOpen(false);
   }
 
-  function addNewShift(e) {
-    axios.post(`${URL}/v1/shifts`, {
-      shift: { name: name, date: startDate, start_time: startTime, end_time: endTime }
-    }).then( response => {
+  function deleteShift(shift) {
+    axios.delete(`${URL}/v1/shifts/${shift.id}`, {}).then( () => {
       alert('Success');
-    })
-    .catch ( error => {
-      alert(error);
+      window.location.reload(false);
+    }).catch((e) => {
+      alert(e);
     });
+  }
+
+  function addNewShift(e) {
+    const shift = { name: name, date: startDate, start_time: startTime, end_time: endTime }
+
+    e.preventDefault();
+    if (currentShift) {
+      axios.put(`${URL}/v1/shifts/${currentShift.id}`, {
+        shift: shift
+      }).then( () => {
+        alert('Success');
+        closeModal();
+        window.location.reload(false);
+        setCurrentShift(null);
+      })
+      .catch (error => {
+        alert(error);
+      });
+    } else {
+      axios.post(`${URL}/v1/shifts`, {
+        shift: shift
+      }).then( () => {
+        closeModal();
+        window.location.reload(false);
+        alert('Success');
+      })
+      .catch (error => {
+        alert(error);
+      });
+    }
   }
 
 
@@ -50,7 +86,7 @@ function App() {
             </button>
           </div>
           <div className="col-12">
-            <ShiftTable openModal={setModalIsOpen}/>
+            <ShiftTable openModal={openModal} deleteShift={deleteShift}/>
           </div>
         </div>
       </div>
@@ -73,11 +109,11 @@ function App() {
               </div>
               <div className="form-group">
                 <label htmlFor="start_time">Start time: </label><br/>
-                <input type="time" id="start_time" value={startTime} className="form-control" onChange={e => setStartTime(e.target.value)} name="start_time" min="12:00" max="24:00" required/>
+                <input type="time" id="start_time" value={startTime} className="form-control" onChange={e => setStartTime(e.target.value)} name="start_time" required/>
               </div>
               <div className="form-group">
                 <label htmlFor="end_time">End time: </label><br/>
-                <input type="time" id="end_time" value={endTime} className="form-control" onChange={e => setEndTime(e.target.value)} name="end_time" min="12:00" max="24:00" required/>
+                <input type="time" id="end_time" value={endTime} className="form-control" onChange={e => setEndTime(e.target.value)} name="end_time" required/>
               </div>
               <button type="submit" onClick={addNewShift} className="btn btn-primary">Save</button>
             </form>
