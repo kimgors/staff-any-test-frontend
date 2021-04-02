@@ -1,7 +1,7 @@
 import Shifts from '../Shifts';
 import React from 'react';
 
-function ShiftTable() {
+function ShiftTable({ openModal, closeModal }) {
   return (
     <table className="table">
       <thead>
@@ -10,10 +10,11 @@ function ShiftTable() {
           <th scope="col">Date</th>
           <th scope="col">Start Time</th>
           <th scope="col">End Time</th>
+          <th scope="col">Actions</th>
         </tr>
       </thead>
       <tbody>
-        <Shifts/>
+        <Shifts openModal={openModal} closeModal={closeModal} />
       </tbody>
     </table>
   );
