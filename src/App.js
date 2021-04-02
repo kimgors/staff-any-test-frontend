@@ -76,7 +76,7 @@ function App() {
   return (
     <div className="App">
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a className="navbar-brand">Take Home Assignment</a>
+        <a className="navbar-brand" href="#home">Take Home Assignment</a>
       </nav>
       <div className="container-fluid">
         <div className="row">
